@@ -61,29 +61,30 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   let rev = JSON.stringify(book.reviews);
   let exists = false;
 
-  console.log("reviews:"+rev);
-
   if(rev == '{}'){
-    rev = '{"user":"'+user+'","text":"'+text+'"}';
-    book.reviews = JSON.parse(rev);
+    
+    let body = [{"user":user,"text":text}];
+    book.reviews = body;
   }
   else{
-    let aux = JSON.parse(rev);
+    let aux = book.reviews;
     
-    for (const i in aux) {
-      if (user === aux.user) {
-        aux.text = text;
-        exists = true;
+    aux.forEach(element => {
+      if(user === element.user){
+         element.text = text;
+         exists = true;
       }
-    }//for
-    book.reviews = aux;
+      
+    });
 
     if(!exists){
-      rev = rev + ',{"user":"'+user+'","text":"'+text+'"}';
-    
-      console.log(rev);
-      //books.reviews = JSON.parse(rev);
+      aux.push({"user":user,"text":text});
+
     }
+    
+    book.reviews = aux;
+
+   
 
     
   }
