@@ -89,10 +89,38 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     
   }
   
-  
-  
+res.status(200).json("The review has been updated successfuly")
 
-res.status(200).json("The review has been save successfuly")
+});
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  
+  const user = req.session.authorization.username;
+  const text = req.body.text;
+  const isbn = req.params.isbn;
+  let book = books[isbn];
+  let index = 0;
+  let exists = false;
+
+ 
+    let aux = book.reviews;
+    
+    aux.forEach(element => {
+      if(user === element.user){
+         aux.splice(index,index+1)
+         console.log(index);
+      }
+      index++;
+    });
+    
+   // book.reviews = aux;
+
+   
+
+    
+  
+  
+res.status(200).json("The review has been deleted successfuly")
 
 });
 
