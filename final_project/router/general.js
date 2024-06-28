@@ -8,11 +8,11 @@ const public_users = express.Router();
 public_users.post("/register", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-if(!username && !password){
-  return res.status(404).json({message : "Please type an username and/or a password"})
-}
+  if (!username && !password) {
+    return res.status(404).json({ message: "Please type an username and/or a password" })
+  }
 
-  
+
   if (username && password) {
     if (isValid(username)) {
       users.push({ "username": username, "password": password });
@@ -25,43 +25,92 @@ if(!username && !password){
 });
 
 // Get the book list available in the shop
+
+
+
 public_users.get('/', function (req, res) {
-  return res.send(JSON.stringify(books))
+  let getBooks = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(JSON.stringify(books))
+    }, 6000)
+  })
+
+  console.log("Please wait...")
+  getBooks.then((books) => {
+    console.log(books);
+    return res.send(books)
+  })
+  console.log("Your request is in progress");
 });
 
 // Get book details based on ISBN
+
+
 public_users.get('/isbn/:isbn', function (req, res) {
   const isbn = req.params.isbn;
-  return res.send(books[isbn]);
+  let getBookByISBN = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(JSON.stringify(books[isbn]))
+    }, 6000)
+  })
+  console.log("Please wait...")
+  getBookByISBN.then((books) => {
+    console.log(books);
+    return res.send(books)
+  })
+  console.log("Your request is in progress");
+
 });
 
 // Get book details based on author
 public_users.get('/author/:author', function (req, res) {
   const author = req.params.author;
-  let aux = [];
+  let getBookByAuthor = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let aux = [];
 
-  for (const i in books) {
-    if (author === books[i].author) {
-      aux.push(books[i]);
-    }
-  }
+      for (const i in books) {
+        if (author === books[i].author) {
+          aux.push(books[i]);
+        }
+      }
 
-  res.send(JSON.stringify(aux));
+      resolve(JSON.stringify(aux))
+    }, 6000)
+  })
+  console.log("Please wait...")
+  getBookByAuthor.then((books) => {
+    console.log(books);
+    return res.send(books)
+  })
+  console.log("Your request is in progress");
 
 });
 
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
   const title = req.params.title;
-  let aux = [];
+  let getBookByTitle = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let aux = [];
 
-  for (const i in books) {
-    if (title === books[i].title) {
-      aux.push(books[i]);
-    }
-  }
+      for (const i in books) {
+        if (title === books[i].title) {
+          aux.push(books[i]);
+        }
+      }
 
-  res.send(JSON.stringify(aux));
+      resolve(JSON.stringify(aux))
+    }, 6000)
+  })
+  console.log("Please wait...")
+  getBookByTitle.then((books) => {
+    console.log(books);
+    return res.send(books)
+  })
+  console.log("Your request is in progress");
+
+
 });
 
 //  Get book review
